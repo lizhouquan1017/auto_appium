@@ -1,7 +1,7 @@
-platformName: Android
-platformVersion: 5.1.1
-appPackage: com.tencent.mm
-appActivity: com.tencent.mm.ui.LauncherUI
+platformName: "Android"
+platformVersion: "10"
+appPackage: "com.tencent.mm"
+appActivity: "com.tencent.mm.ui.LauncherUI"
 noReset: True
 unicodeKeyboard: True
 resetKeyboard: True

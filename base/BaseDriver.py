@@ -24,7 +24,7 @@ class BaseDriver(object):
                 desired_caps['platformName'] = data['platformName']
                 desired_caps['platformVersion'] = data['platformVersion']
                 desired_caps['deviceName'] = devices
-                desired_caps['app'] = PATH('../app/vx.apk')
+                # desired_caps['app'] = PATH('../app/vx.apk')
                 desired_caps['appPackage'] = data['appPackage']
                 desired_caps['appActivity'] = data['appActivity']
                 desired_caps['noReset'] = "True"
