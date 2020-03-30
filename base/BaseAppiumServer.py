@@ -21,7 +21,7 @@ class Server(object):
         bootstrap_prot_list = p.creat_port_list(4900, devices_list)
         for i in range(len(devices_list)):
             cmd = 'appium -a ' + '127.0.0.1' + ' -p ' + str(appium_port_list[i]) + ' -bp ' + \
-                  str(bootstrap_prot_list[i]) + ' -U ' + str(devices_list[i])
+                  str(bootstrap_prot_list[i])
             command_list.append(cmd)
             device = devices_list[i]
             bp = bootstrap_prot_list[i]
