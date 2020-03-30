@@ -18,12 +18,12 @@ class BaseDriver(object):
             with open('../config/Ys.yaml', 'r', encoding='utf-8') as file:
                 data = yaml.load(file)
                 ry = ReadYaml()
-                devices = ry.get_value('user_info_0', 'deviceName')
+                # devices = ry.get_value('user_info_0', 'deviceName')
                 port = ry.get_value('user_info_0', 'port')
                 desired_caps = {}
                 desired_caps['platformName'] = data['platformName']
                 desired_caps['platformVersion'] = data['platformVersion']
-                desired_caps['deviceName'] = devices
+                # desired_caps['deviceName'] = devices
                 # desired_caps['app'] = PATH('../app/vx.apk')
                 desired_caps['appPackage'] = data['appPackage']
                 desired_caps['appActivity'] = data['appActivity']
@@ -32,6 +32,10 @@ class BaseDriver(object):
                 desired_caps['resetKeyboard'] = data['resetKeyboard']
                 desired_caps['automationName'] = "uiautomator2"
                 desired_caps['systemPort'] = port+8000
+                udid = os.getenv('udid',None)
+                if udid is not None:
+                    desired_caps['udid'] = udid
+                    print('udid is %s' %udid)
                 driver = webdriver.Remote('http://127.0.0.1' + ':' + str(port) + '/wd/hub', desired_caps)
             return driver
 
