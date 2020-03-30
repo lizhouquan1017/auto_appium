@@ -3,7 +3,7 @@ __author__ = "lizhouquan"
 
 import os
 import socket
-
+from util.getSystem import getsystemstr
 
 class Port(object):
 
@@ -16,28 +16,28 @@ class Port(object):
             return True
 
     def release_port(self, port):
-        cmd_find = "lsof -i:%s" % port
-        result = os.popen(cmd_find)
-        text = result.read()
-        if text != "":
-            pid = text.split()[10]
-            print(pid)
-            cmd_kill = 'kill -9 %s' % pid
-            print(cmd_kill)
-            os.popen(cmd_kill)
-
-        # result = os.popen(cmd_find).read()
-        # print(result)
-        #
-        # if str(port) and 'LISTENING' in result:
-        #     i = result.index('LISTENING')
-        #     start = i + len('LISTENING') + 7
-        #     end = result.index('\n')
-        #     pid = result[start:end]
-        #
-        #     cmd_kill = "taskkill -f -pid %s" % pid
-        #     print(cmd_kill)
-        #     os.popen(cmd_kill)
+        if getsystemstr() == 'Darwin':
+            cmd_find = "lsof -i:%s" % port
+            result = os.popen(cmd_find)
+            text = result.read()
+            if text != "":
+                pid = text.split()[10]
+                print(pid)
+                cmd_kill = 'kill -9 %s' % pid
+                print(cmd_kill)
+                os.popen(cmd_kill)
+        elif getsystemstr()== 'Window':
+            cmd_find = "netstat -ano |findstr %s" % port
+            result = os.popen(cmd_find).read()
+            print(result)
+            if str(port) and 'LISTENING' in result:
+                i = result.index('LISTENING')
+                start = i + len('LISTENING') + 7
+                end = result.index('\n')
+                pid = result[start:end]
+                cmd_kill = "taskkill -f -pid %s" % pid
+                print(cmd_kill)
+                os.popen(cmd_kill)
 
     def check_port_used(self, port):
         """

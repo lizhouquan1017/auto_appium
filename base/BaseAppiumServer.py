@@ -4,6 +4,7 @@ __author__ = "lizhouquan"
 import subprocess
 import os
 import platform
+from util.getSystem import getsystemstr
 from base.BaseAdb import AndroidDebugBridge
 from base.BaseCheckPort import Port
 from base.BaseReadYaml import ReadYaml
@@ -12,11 +13,6 @@ from time import sleep
 
 
 class Server(object):
-
-    # 获取系统类型
-    def getsystemstr(self):
-        system = platform.system()
-        return system
 
     def creat_command_list(self, devices_list):
         p = Port()
@@ -43,7 +39,7 @@ class Server(object):
                              stderr=subprocess.STDOUT)
 
     def close_appium_server(self):
-        system = self.getsystemstr()
+        system = getsystemstr()
         if system != 'Darwin':
             server_list = os.popen('tasklist | find "node.exe" ').readlines()
             if len(server_list) > 0:
@@ -64,5 +60,5 @@ if __name__ == '__main__':
 
     devices = AndroidDebugBridge().attached_devices()
     print(devices)
-    s = Server()
-    s.start_appium_server(devices)
+    system = getsystemstr()
+    print(system)
