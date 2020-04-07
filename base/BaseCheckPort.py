@@ -4,6 +4,9 @@ __author__ = "lizhouquan"
 import os
 import socket
 from util.getSystem import getsystemstr
+from base.BaseAdb import AndroidDebugBridge
+from base.BaseReadYaml import ReadYaml
+
 
 class Port(object):
 
@@ -75,9 +78,11 @@ class Port(object):
 
 
 if __name__ == '__main__':
-    # devices_list = AndroidDebugBridge().attached_devices()
+    devices_list = AndroidDebugBridge().attached_devices()
     p = Port()
-    # post_list = p.creat_port_list(4723, devices_list)
-    # print(post_list)
-    p.release_port(4708)
-    p.release_port(4710)
+    post_list = p.creat_port_list(4723, devices_list)
+    ry = ReadYaml()
+    for i in range(len(devices_list)):
+        ry.write_data(i,devices_list[i],int(post_list[i])+8000,post_list[i])
+        print(devices_list[i])
+        print(post_list[i])

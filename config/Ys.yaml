@@ -1,5 +1,5 @@
 platformName: "Android"
-platformVersion: "10"
+platformVersion: "8.1.0"
 appPackage: "com.tencent.mm"
 appActivity: "com.tencent.mm.ui.LauncherUI"
 noReset: True

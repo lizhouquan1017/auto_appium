@@ -1,6 +1,11 @@
 # -*- coding:utf-8 -*-
 __author__ = "lizhouquan"
 
+import sys
+import os
+curPath = os.path.abspath(os.path.dirname(__file__))
+rootPath = os.path.split(curPath)[0]
+sys.path.append(rootPath)
 import subprocess
 import os
 import platform
@@ -34,8 +39,8 @@ class Server(object):
         sleep(15)
         cmd = self.creat_command_list(devices_list)
         for i in range(len(cmd)):
-            remove_file('../appium_log')
-            subprocess.Popen(cmd[i], shell=True, stdout=open('../appium_log/'+str(i)+'.log', 'a'),
+            remove_file(rootPath+'/appium_log')
+            subprocess.Popen(cmd[i], shell=True, stdout=open(rootPath+'/appium_log/'+str(i)+'.log', 'a'),
                              stderr=subprocess.STDOUT)
 
     def close_appium_server(self):
@@ -59,6 +64,5 @@ class Server(object):
 if __name__ == '__main__':
 
     devices = AndroidDebugBridge().attached_devices()
-    print(devices)
-    system = getsystemstr()
-    print(system)
+    s =Server()
+    s.start_appium_server(devices)

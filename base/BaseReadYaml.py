@@ -1,10 +1,13 @@
 # -*- coding:utf-8 -*-
 __author__ = "lizhouquan"
 
+import sys
+import os
 import yaml
-from os import path
-parent_path = path.dirname(path.dirname(__file__))
-file_path = path.join(parent_path, r"config\device.yaml")
+curPath = os.path.abspath(os.path.dirname(__file__))
+rootPath = os.path.split(curPath)[0]
+sys.path.append(rootPath)
+file_path = (rootPath+'/config/device.yaml')
 
 
 class ReadYaml(object):
@@ -42,6 +45,7 @@ class ReadYaml(object):
         data = self.join_data(i, device, bp, port)
         with open(file_path, "a", encoding="utf-8") as fr:
             yaml.dump(data, fr)
+        fr.close()
 
     def join_data(self, i, device, bp, port):
         data = {
@@ -65,5 +69,5 @@ class ReadYaml(object):
 
 if __name__ == '__main__':
     readYaml = ReadYaml()
-    device = readYaml.get_value("user_info_0", "deviceName")
+    device = readYaml.get_value("user_info_0", "port")
     print(device)
