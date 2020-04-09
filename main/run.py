@@ -16,16 +16,16 @@ import logging
 
 
 
-devices = AndroidDebugBridge().attached_devices()
-s = Server()
-s.start_appium_server(devices)
-
-time.sleep(10)
+# devices = AndroidDebugBridge().attached_devices()
+# s = Server()
+# s.start_appium_server(devices)
+#
+# time.sleep(10)
 
 test_dir = rootPath+'/case'
 report_dir = rootPath+'/reports'
 
-discover = unittest.defaultTestLoader.discover(test_dir, pattern='demo.py')
+discover = unittest.defaultTestLoader.discover(test_dir, pattern='login.py')
 
 now = time.strftime('%Y-%m-%d %H_%M_%S')
 report_name = report_dir+'/'+now+' test_report.html'
