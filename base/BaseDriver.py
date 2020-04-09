@@ -4,6 +4,7 @@ __author__ = "lizhouquan"
 import yaml
 import sys
 import os
+from selenium.webdriver.common import utils
 from appium import webdriver
 from selenium.webdriver.remote.webdriver import WebDriver
 from base.BaseReadYaml import ReadYaml
@@ -22,7 +23,8 @@ class BaseDriver(object):
             with open(rootPath+'/config/Ys.yaml', 'r', encoding='utf-8') as file:
                 data = yaml.load(file)
                 ry = ReadYaml()
-                port = ry.get_value('user_info_0', 'port')
+                # port = ry.get_value('user_info_0', 'port')
+                port = utils.free_port()
                 desired_caps = {}
                 desired_caps['platformName'] = data['platformName']
                 desired_caps['platformVersion'] = data['platformVersion']
@@ -32,12 +34,12 @@ class BaseDriver(object):
                 desired_caps['unicodeKeyboard'] = data['unicodeKeyboard']
                 desired_caps['resetKeyboard'] = data['resetKeyboard']
                 desired_caps['automationName'] = "uiautomator2"
-                desired_caps['systemPort'] = port+8000
+                desired_caps['systemPort'] = utils.free_port()
                 udid = os.getenv('udid',None)
                 if udid is not None:
                     desired_caps['udid'] = udid
                     print('udid is %s' %udid)
-                cls.driver = webdriver.Remote('http://127.0.0.1' + ':' + str(port) + '/wd/hub', desired_caps)
+                cls.driver = webdriver.Remote('http://127.0.0.1:4273/wd/hub', desired_caps)
                 cls.driver.implicitly_wait(10)
             return cls.driver
 
