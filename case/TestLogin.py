@@ -10,7 +10,8 @@ from PO.business.login import LoginBusiness
 
 # class TestLogin(unittest.TestCase):
 @allure.feature("登录后操作")
-class TestLogin():
+@allure.severity("normal")
+class TestLogin(object):
 
     # def setUp(self):
     #     b = BaseDriver()
