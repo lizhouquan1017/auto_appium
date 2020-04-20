@@ -24,7 +24,7 @@ class BaseDriver(object):
                 data = yaml.load(file)
                 ry = ReadYaml()
                 # port = ry.get_value('user_info_0', 'port')
-                port = utils.free_port()
+                # port = utils.free_port()
                 desired_caps = {}
                 desired_caps['platformName'] = data['platformName']
                 desired_caps['platformVersion'] = data['platformVersion']
@@ -34,6 +34,7 @@ class BaseDriver(object):
                 desired_caps['unicodeKeyboard'] = data['unicodeKeyboard']
                 desired_caps['resetKeyboard'] = data['resetKeyboard']
                 desired_caps['automationName'] = "uiautomator2"
+                desired_caps['noReset'] = True
                 desired_caps['systemPort'] = utils.free_port()
                 udid = os.getenv('udid',None)
                 if udid is not None:
