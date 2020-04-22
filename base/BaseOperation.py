@@ -5,10 +5,16 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from appium.webdriver.common.mobileby import By
+from datetime import datetime
+import allure
 import logging
 import os
 import time
 import csv
+
+curPath = os.path.abspath(os.path.dirname(__file__))
+rootPath = os.path.split(curPath)[0]
+os.sys.path.append(rootPath)
 
 
 class BaseOperation(object):
@@ -28,17 +34,10 @@ class BaseOperation(object):
             return e
         except NoSuchElementException:
             logging.info(r'元素控件不存在')
-            file_path = os.path.dirname(os.path.abspath('.')) + '/imgs/'
-            rq = time.strftime('%Y%m%d%H%M', time.localtime(time.time()))
-            screen_name = file_path + rq + '.png'
-            self.driver.get_screenshot_as_file(screen_name)
-            logging.info(r'保存截图成功')
+            self.get_screenshot("元素控件未找到")
         except TimeoutException:
             logging.info('查找元素超时')
-            file_path = os.path.dirname(os.path.abspath('.')) + '/imgs/'
-            rq = time.strftime('%Y%m%d%H%M', time.localtime(time.time()))
-            screen_name = file_path + rq + '.png'
-            self.driver.get_screenshot_as_file(screen_name)
+            self.get_screenshot("元素控件未找到")
 
     def get_text(self, *loc):
         """
@@ -246,3 +245,15 @@ class BaseOperation(object):
                 filewriter.writelines(line)
         filewriter.close()
         filereader.close()
+
+    def get_screenshot(self, img_doc):
+        '''
+        页面截屏保存截图
+        :param img_doc: 截图说明
+        :return:
+        '''
+        file_name = rootPath+"img"+ "\\{}_{}.png".format(datetime.strftime(datetime.now(), "%Y%m%d%H%M%S"), img_doc)
+        self.driver.save_screenshot(file_name)
+        with open(file_name, mode='rb') as f:
+            file = f.read()
+        allure.attach(file, img_doc, allure.attachment_type.PNG)
