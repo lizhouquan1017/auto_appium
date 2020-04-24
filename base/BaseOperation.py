@@ -9,12 +9,13 @@ from datetime import datetime
 import allure
 import logging
 import os
+import sys
 import time
 import csv
 
 curPath = os.path.abspath(os.path.dirname(__file__))
 rootPath = os.path.split(curPath)[0]
-os.sys.path.append(rootPath)
+sys.path.append(rootPath)
 
 
 class BaseOperation(object):
@@ -39,6 +40,24 @@ class BaseOperation(object):
             logging.info('查找元素超时')
             self.get_screenshot("元素控件未找到")
 
+    def find_elements(self, *loc):
+        """
+        通过id获取元素数组
+        :param loc:
+        :return:
+        """
+        try:
+            elist = WebDriverWait(self.driver, 10, 1, NoSuchElementException).until(
+                lambda driver: driver.find_elements_by_id(*loc))
+            return elist
+        except NoSuchElementException:
+            logging.info(r'元素控件不存在')
+            self.get_screenshot("元素控件未找到")
+        except TimeoutException:
+            logging.info('查找元素超时')
+            self.get_screenshot("元素控件未找到")
+
+
     def get_text(self, *loc):
         """
         获取元素属性
@@ -51,6 +70,7 @@ class BaseOperation(object):
             return text
         except NoSuchElementException:
             logging.error('无法获取元素属性')
+            self.get_screenshot("元素没有text属性")
             logging.info(r'保存截图成功')
 
     # 通过xpath定位
@@ -60,16 +80,10 @@ class BaseOperation(object):
             return e
         except NoSuchElementException:
             logging.info('元素控件不存在')
-            file_path = os.path.dirname(os.path.abspath('.')) + '/imgs/'
-            rq = time.strftime('%Y%m%d%H%M', time.localtime(time.time()))
-            screen_name = file_path + rq + '.png'
-            self.driver.get_screenshot_as_file(screen_name)
+            self.get_screenshot("元素控件未找到")
         except TimeoutException:
             logging.info('获取元素超时')
-            file_path = os.path.dirname(os.path.abspath('.')) + '/imgs/'
-            rq = time.strftime('%Y%m%d%H%M', time.localtime(time.time()))
-            screen_name = file_path + rq + '.png'
-            self.driver.get_screenshot_as_file(screen_name)
+            self.get_screenshot("获取元素超时")
 
     # 通过text值获取元素
     def find_element_text(self, name):
@@ -78,16 +92,10 @@ class BaseOperation(object):
             return e
         except NoSuchElementException:
             logging.info('元素控件不存在')
-            file_path = os.path.dirname(os.path.abspath('.')) + '/imgs/'
-            rq = time.strftime('%Y%m%d%H%M', time.localtime(time.time()))
-            screen_name = file_path + rq + '.png'
-            self.driver.get_screenshot_as_file(screen_name)
+            self.get_screenshot("元素控件未找到")
         except TimeoutException:
             logging.info('获取元素超时')
-            file_path = os.path.dirname(os.path.abspath('.')) + '/imgs/'
-            rq = time.strftime('%Y%m%d%H%M', time.localtime(time.time()))
-            screen_name = file_path + rq + '.png'
-            self.driver.get_screenshot_as_file(screen_name)
+            self.get_screenshot("元素控件未找到")
 
     # 输入文本
     def type(self, name, text):
@@ -96,10 +104,7 @@ class BaseOperation(object):
             e.send_keys(text)
         except e:
             logging.error('控件无法输入')
-            file_path = os.path.dirname(os.path.abspath('.')) + '/imgs/'
-            rq = time.strftime('%Y%m%d%H%M', time.localtime(time.time()))
-            screen_name = file_path + rq + '.png'
-            self.driver.get_screenshot_as_file(screen_name)
+            self.get_screenshot("控件元素不支持输入")
 
     # 点击
     def click(self, name):
@@ -108,10 +113,7 @@ class BaseOperation(object):
             e.click()
         except e:
             logging.error('元素无法点击')
-            file_path = os.path.dirname(os.path.abspath('.')) + '/imgs/'
-            rq = time.strftime('%Y%m%d%H%M', time.localtime(time.time()))
-            screen_name = file_path + rq + '.png'
-            self.driver.get_screenshot_as_file(screen_name)
+            self.get_screenshot("控件元素不支持点击")
 
     # 通过text点击
     def click_text(self, value):
@@ -134,11 +136,8 @@ class BaseOperation(object):
         except TimeoutException:
             # self.get_windows_img(text+r'文本未出现')
             # return False
-            file_path = os.path.dirname(os.path.abspath('.')) + '/imgs/'
-            rq = time.strftime('%Y%m%d%H%M', time.localtime(time.time()))
-            screen_name = file_path + rq + text + '.png'
-            self.driver.get_screenshot_as_file(screen_name)
             logging.info('未出现toast信息')
+            self.get_screenshot("未出现toast信息")
 
     # 判断元素是否存在
     def is_exists(self, *loc):

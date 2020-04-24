@@ -1,10 +1,9 @@
 # -*- coding:utf-8 -*-
 __author__ = "lizhouquan"
 
-
 import allure
-from PO.business.login import LoginBusiness
 from PO.business.smoke import SomkeBusiness
+from PO.business.login import LoginBusiness
 from util.readExcel import read_xlsx
 import os
 import sys
@@ -15,18 +14,26 @@ sys.path.append(rootPath)
 userconfig = read_xlsx(rootPath + '/data/user_lizhouquan.xlsx')
 
 
-@allure.epic("云打印登录业务")
-class TestLogin(object):
+@allure.epic("云打印冒烟测试")
+class TeclsstSmoke(object):
 
-    def setup_function(self, login):
-        self.driver = login
-        self.driver.launch_app()
-        print("前面方法")
+    # def setup_function(self, login):
+    #     self.driver = login
+    #     self.driver.launch_app("com.gengcon.android.jccloudprinter")
+    #
+    # def teardown_function(self, login):
+    #     self.driver = login
+    #     self.driver.close_app("com.gengcon.android.jccloudprinter")
 
-    def teardown_function(self, login):
+
+    @allure.story("连接蓝牙")
+    @allure.severity("critical")
+    def test_device_connection(self,login):
         self.driver = login
-        self.driver.close_app()
-        print("后面方法")
+        s = SomkeBusiness(self.driver)
+        flag = s.bluetooth_connection(num=3,hardware_series_name=r"B21", device_name=r"B21-C1176202",connection_name=r"B21")
+        assert flag
+
 
     @allure.story("验证码登录")
     @allure.severity("critical")
@@ -46,11 +53,11 @@ class TestLogin(object):
         flag2 = l.logout(num=2, result=r"欢迎回来")
         assert flag1 & flag2
 
-    @allure.story("连接蓝牙")
+    @allure.story("第三方QQ登录")
     @allure.severity("critical")
-    def test_device_connection(self,login):
+    def test_qq_login(self,login):
         self.driver = login
-        s = SomkeBusiness(self.driver)
-        flag = s.bluetooth_connection(num=3,hardware_series_name=r"B21", device_name=r"B21-C1176202",connection_name=r"B21")
-        assert flag
-
+        l = LoginBusiness(self.driver)
+        flag1 = l.qq_login(num=2, result=r"账号管理")
+        flag2 = l.logout(num=2, result=r"欢迎回来")
+        assert flag1 & flag2

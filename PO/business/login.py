@@ -1,8 +1,10 @@
-# coding:utf-8
+# -*- coding:utf-8 -*-
+__author__ = "lizhouquan"
 import allure
 from base.BaseOperation import BaseOperation
 from base.BaseReadIni import ReadIni
 from time import sleep
+
 
 
 @allure.feature("云打印登录业务")
@@ -14,7 +16,6 @@ class LoginBusiness(BaseOperation):
 
     # 下面为业务操作流
     # 验证码登录步骤
-
     @allure.step("点击我的")
     def click_personal_center(self, num=0):
         self.click(self.efg.read_config("personal_center"))
@@ -70,6 +71,17 @@ class LoginBusiness(BaseOperation):
         self.click(self.efg.read_config("bounced_confirm"))
         sleep(num)
 
+    @allure.step("点击QQ第三方登录")
+    def click_qq_login(self, num=0):
+        self.click(self.efg.read_config("qq_login"))
+        sleep(num)
+
+    @allure.step("点击QQ授权按钮")
+    def click_qq_authorization(self, num=0, text=None):
+        xpath = "//*[@resource-id='"+self.efg.read_config("authorization_button")+"' and @text='"+text+"']"
+        e = self.find_element_xpath(xpath)
+        e.click()
+
     @allure.step("判断登录成功")
     def check_login_success(self, result=None, num=0):
         text = self.get_text(self.efg.read_config("login_title"))
@@ -89,29 +101,45 @@ class LoginBusiness(BaseOperation):
             return False
 
     # 验证码登录
-    def verify_login(self, phone, code, num):
+    def verify_login(self, phone, code, num, result=None):
         self.click_personal_center(num)
         self.click_login_page(num)
         self.click_verify_tab(num)
         self.input_phone(phone, num)
         self.input_verify_code(code, num)
         self.click_login_button(num)
+        flag = self.check_login_success(result=result)
+        return flag
 
     # 密码登录
-    def pwd_login(self, phone, pwd, num):
+    def pwd_login(self, phone, pwd, num, result=None):
         self.click_personal_center(num)
         self.click_login_page(num)
         self.click_pwd_tab(num)
         self.input_phone(phone, num)
         self.input_pwd(pwd, num)
         self.click_login_button(num)
+        flag = self.check_login_success(result=result)
+        return flag
+
+    # 第三方QQ登录
+    def qq_login(self, num, text="授权并登录", result=None):
+        self.click_personal_center(num)
+        self.click_login_page(num)
+        self.click_verify_tab(num)
+        self.click_qq_login(num)
+        self.click_qq_authorization(10, test=text)
+        flag = self.check_login_success(result=result)
+        return flag
 
     # 退出登录
-    def logout(self, num):
+    def logout(self, num, result=None):
         self.click_personal_center(num)
         self.click_setting_button(num)
         self.click_logout_button(num)
         self.click_bounced_confirm(num)
+        flag = self.check_logout_success(result=result)
+        return flag
 
 
 
