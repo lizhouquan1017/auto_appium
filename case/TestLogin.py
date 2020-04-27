@@ -23,7 +23,6 @@ class TestLogin(object):
     def teardown_method(self):
         App.quit()
 
-
     @allure.story("验证码登录")
     @allure.severity("critical")
     def test_verifycode_login(self):

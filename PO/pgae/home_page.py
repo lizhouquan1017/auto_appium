@@ -6,19 +6,17 @@ from base.BaseOperation import BaseOperation
 from base.BaseReadIni import ReadIni
 from time import sleep
 
+efg = ReadIni(file_name='home_page.ini')
+
 
 @allure.feature("冒烟测试")
-class SomkeBusiness(BaseOperation):
-
-    def __init__(self, driver):
-        super(SomkeBusiness, self).__init__(driver)
-        self.efg = ReadIni(file_name='home_page.ini')
+class HomePage(BaseOperation):
 
     # 下面是业务代码
     # 下面是步骤
     @allure.step("点击蓝牙连接")
     def click_bluetooth(self, num=0):
-        self.click(self.efg.read_config("bluetooth_connection"))
+        self.click(efg.read_config("bluetooth_connection"))
         sleep(num)
 
     @allure.step("点击切换硬件")
@@ -28,7 +26,7 @@ class SomkeBusiness(BaseOperation):
 
     @allure.step("选择B21系列")
     def choose_hardware_series(self, hardware_series_name=None, num=0):
-        xpath = "//*[@resource-id='"+self.efg.read_config("hardware_series")+"' and @text='"+hardware_series_name+"']"
+        xpath = "//*[@resource-id='"+efg.read_config("hardware_series")+"' and @text='"+hardware_series_name+"']"
         print(xpath)
         e = self.find_element_xpath(xpath)
         e.click()
@@ -36,14 +34,17 @@ class SomkeBusiness(BaseOperation):
 
     @allure.step("选择连接打印机")
     def connection_device(self, device_name=None, num=0):
-        xpath = "//*[@resource-id='"+self.efg.read_config("device_name")+"' and @text='"+device_name+"']/../android.widget.TextView"
+        xpath = "//*[@resource-id='"+efg.read_config("device_name")\
+                + "' and @text='"+device_name+"']/../android.widget.TextView"
         print(xpath)
         e = self.find_element_xpath(xpath)
         e.click()
+        sleep(num)
 
     @allure.step("判断打印机是否连接")
     def check_device_connection(self, connection_name=None, num=0):
-        v = self.get_text(self.efg.read_config("bluetooth_connection"))
+        v = self.get_text(efg.read_config("bluetooth_connection"))
+        sleep(num)
         if v != connection_name:
             return False
         elif v == r"未连接":
@@ -58,7 +59,7 @@ class SomkeBusiness(BaseOperation):
         self.click_bluetooth(num=num)
         self.click_switch_hardware(num=num)
         self.choose_hardware_series(hardware_series_name=hardware_series_name,num=num)
-        self.connection_device(device_name=device_name, num=num)
+        self.connection_device(device_name=device_name, num=5)
         flag = self.check_device_connection(connection_name=connection_name, num=10)
         return flag
 

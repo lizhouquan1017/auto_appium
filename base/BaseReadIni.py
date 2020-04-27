@@ -34,6 +34,6 @@ class ReadIni(object):
 
 
 if __name__ == '__main__':
-    page = ReadIni(file_name="home_page.ini")
+    page = ReadIni(file_name="main_page.ini")
     value = page.read_config("phone_number_input")
     print(value)
