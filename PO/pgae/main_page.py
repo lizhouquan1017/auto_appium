@@ -16,13 +16,13 @@ class MainPage(BaseOperation):
 
     @allure.step("进入登录页面")
     def to_login_page(self):
-        sleep(5)
         self.click(efg.read_config("personal_center"))
         self.click(efg.read_config("login_success"))
+        sleep(5)
         return LoginPage(self.driver)
 
     @allure.step("进入首页")
     def to_home_page(self):
-        sleep(5)
         self.click(efg.read_config("main_page_button"))
+        sleep(5)
         return HomePage(self.driver)

@@ -31,9 +31,3 @@ def read_xlsx(path):
                 # 把字典添加到列表中
                 xlsx_list.append(xlsx_dict)
             return xlsx_list
-
-
-if __name__ == '__main__':
-    data = read_xlsx('../data/user_lizhouquan.xlsx')
-    print(data)
-    print(data[0].get('phonenumber'))

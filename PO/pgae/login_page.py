@@ -77,6 +77,29 @@ class LoginPage(BaseOperation):
         xpath = "//*[@resource-id='"+efg.read_config("authorization_button")+"' and @text='"+text+"']"
         e = self.find_element_xpath(xpath)
         e.click()
+        sleep(num)
+
+    @allure.step("点击用户注销")
+    def click_user_logged_off(self, num=0):
+        self.click(efg.read_config("logged_off"))
+        sleep(num)
+
+    @allure.step("点击同意注销")
+    def click_logged_agree(self, num=0):
+        self.click(efg.read_config("logged_agree"))
+        sleep(num)
+
+    @allure.step("点击字体管理")
+    def click_font_management(self, num=0):
+        self.click(efg.read_config("font_management"))
+        sleep(num)
+
+    @allure.step("点击下载字体")
+    def click_down_font(self, num=0, font_name=None):
+        xpath = "//*[@resource-id='"+efg.read_config("down_font")+"' and @text='"+font_name+"']/../android.widget.ImageView"
+        self.find_element_xpath(xpath).click()
+        sleep(num)
+        self.get_screenshot("下载字体成功截图")
 
     @allure.step("判断登录成功")
     def check_login_success(self, result=None, num=0):
@@ -98,8 +121,6 @@ class LoginPage(BaseOperation):
 
     # 验证码登录
     def verify_login(self, phone, code, num, result=None):
-        # self.click_personal_center(num)
-        # self.click_login_page(num)
         self.click_verify_tab(num)
         self.input_phone(phone, num)
         self.input_verify_code(code, num)
@@ -109,8 +130,6 @@ class LoginPage(BaseOperation):
 
     # 密码登录
     def pwd_login(self, phone, pwd, num, result=None):
-        # self.click_personal_center(num)
-        # self.click_login_page(num)
         self.click_pwd_tab(num)
         self.input_phone(phone, num)
         self.input_pwd(pwd, num)
@@ -120,8 +139,6 @@ class LoginPage(BaseOperation):
 
     # 第三方QQ登录
     def qq_login(self, num, text="授权并登录", result=None):
-        # self.click_personal_center(num)
-        # self.click_login_page(num)
         self.click_verify_tab(num)
         self.click_qq_login(num)
         self.click_qq_authorization(10, test=text)
@@ -137,5 +154,20 @@ class LoginPage(BaseOperation):
         flag = self.check_logout_success(result=result)
         return flag
 
+    # 用户注销
+    def user_logged(self, num, result=None):
+        self.click_personal_center(num)
+        self.click_login_page(num)
+        self.click_user_logged_off(num)
+        self.click_logged_agree(num)
+        flag = self.check_logout_success(result=result)
+        return flag
 
+    # 字体下载
+    def font_down(self, num, font_name):
+        self.click_personal_center(num)
+        self.click_setting_button(num)
+        self.click_font_management(num)
+        self.click_down_font(num, font_name=font_name)
+        return True
 

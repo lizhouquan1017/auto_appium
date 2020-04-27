@@ -3,14 +3,14 @@ __author__ = "lizhouquan"
 import os
 import sys
 import yaml
-from selenium.webdriver.common import utils
-from appium import webdriver
-from selenium.webdriver.remote.webdriver import WebDriver
-from PO.pgae.main_page import MainPage
 
 curPath = os.path.abspath(os.path.dirname(__file__))
 rootPath = os.path.split(curPath)[0]
 sys.path.append(rootPath)
+from selenium.webdriver.common import utils
+from appium import webdriver
+from selenium.webdriver.remote.webdriver import WebDriver
+from PO.pgae.main_page import MainPage
 yaml.warnings({'YAMLLoadWarning': False})
 
 
@@ -23,11 +23,11 @@ class App(object):
         with open(rootPath + '/config/Ys.yaml', 'r', encoding='utf-8') as file:
             data = yaml.load(file)
             desired_caps = {}
+            # desired_caps['app'] = rootPath+'/app/jc_print.apk'
             desired_caps['platformName'] = data['platformName']
             desired_caps['platformVersion'] = data['platformVersion']
             desired_caps['appPackage'] = data['appPackage']
             desired_caps['appActivity'] = data['appActivity']
-            desired_caps['noReset'] = "True"
             desired_caps['unicodeKeyboard'] = data['unicodeKeyboard']
             desired_caps['resetKeyboard'] = data['resetKeyboard']
             desired_caps['automationName'] = "uiautomator2"
