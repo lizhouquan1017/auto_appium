@@ -4,12 +4,10 @@ from base.BaseOperation import BaseOperation
 from base.BaseReadIni import ReadIni
 from time import sleep
 
+efg = ReadIni(file_name='wecatlogin_page.ini')
+
 
 class WeCatLoginBusiness(BaseOperation):
-
-    def __init__(self, driver):
-        super(WeCatLoginBusiness, self).__init__(driver)
-        self.efg = ReadIni(file_name='wecatlogin_page.ini')
 
     # 下面为业务操作流
     # 输入电话号码

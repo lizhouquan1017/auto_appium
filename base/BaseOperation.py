@@ -1,6 +1,7 @@
 # coding:utf-8
 __author__ = "lizhouquan"
 
+from appium.webdriver.webdriver import WebDriver
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -20,7 +21,7 @@ sys.path.append(rootPath)
 
 class BaseOperation(object):
 
-    def __init__(self, driver):
+    def __init__(self, driver:WebDriver):
         self.driver = driver
 
     def find_element(self, *loc):

@@ -7,8 +7,7 @@ import os
 from selenium.webdriver.common import utils
 from appium import webdriver
 from selenium.webdriver.remote.webdriver import WebDriver
-from PO.business.login import LoginBusiness
-from PO.business.WeCatLogin import WeCatLoginBusiness
+from PO.pgae.main_page import MainPage
 curPath = os.path.abspath(os.path.dirname(__file__))
 rootPath = os.path.split(curPath)[0]
 sys.path.append(rootPath)
@@ -17,7 +16,8 @@ yaml.warnings({'YAMLLoadWarning': False})
 
 class BaseDriver(object):
 
-    def start_driver(self):
+    @classmethod
+    def start_driver(cls):
             with open(rootPath+'/config/Ys.yaml', 'r', encoding='utf-8') as file:
                 data = yaml.load(file)
                 desired_caps = {}
@@ -35,14 +35,7 @@ class BaseDriver(object):
                 if udid is not None:
                     desired_caps['udid'] = udid
                     print('udid is %s' %udid)
-                driver = webdriver.Remote('http://127.0.0.1:4723/wd/hub', desired_caps)
-                driver.implicitly_wait(10)
-            return driver
+                cls.driver = webdriver.Remote('http://127.0.0.1:4723/wd/hub', desired_caps)
+                cls.driver.implicitly_wait(10)
+            return MainPage(cls.driver)
 
-if __name__ == '__main__':
-    b = BaseDriver()
-    driver = b.start_driver()
-    driver.launch_app()
-    w = WeCatLoginBusiness(driver)
-    w.enter_login()
-    w.check_status()

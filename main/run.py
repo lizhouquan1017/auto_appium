@@ -25,7 +25,7 @@ import logging
 test_dir = rootPath+'/case'
 report_dir = rootPath+'/reports'
 
-discover = unittest.defaultTestLoader.discover(test_dir, pattern='login.py')
+discover = unittest.defaultTestLoader.discover(test_dir, pattern='login_page.py')
 
 now = time.strftime('%Y-%m-%d %H_%M_%S')
 report_name = report_dir+'/'+now+' test_report.html'

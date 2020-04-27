@@ -15,15 +15,14 @@ userconfig = read_xlsx(rootPath + '/data/user_lizhouquan.xlsx')
 
 
 @allure.epic("云打印冒烟测试")
-class TeclsstSmoke(object):
+class TestSmoke(object):
 
-    # def setup_function(self, login):
-    #     self.driver = login
-    #     self.driver.launch_app("com.gengcon.android.jccloudprinter")
-    #
-    # def teardown_function(self, login):
-    #     self.driver = login
-    #     self.driver.close_app("com.gengcon.android.jccloudprinter")
+    def setup_function(self, login):
+        self.driver = login
+
+    def teardown_function(self, login):
+        self.driver = login
+        self.driver.close_app("com.gengcon.android.jccloudprinter")
 
 
     @allure.story("连接蓝牙")

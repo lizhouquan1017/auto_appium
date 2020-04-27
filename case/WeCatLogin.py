@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 __author__ = "lizhouquan"
 
-from PO.business.WeCatLogin import WeCatLoginBusiness
+from PO.pgae.WeCatLogin import WeCatLoginBusiness
 from base.BaseDriver import BaseDriver
 from util.readExcel import read_xlsx
 import os

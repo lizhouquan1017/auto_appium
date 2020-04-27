@@ -3,11 +3,10 @@ __author__ = "lizhouquan"
 
 
 import allure
-from PO.business.login import LoginBusiness
-from PO.business.smoke import SomkeBusiness
-from util.readExcel import read_xlsx
 import os
 import sys
+from util.readExcel import read_xlsx
+from base.App import App
 curPath = os.path.abspath(os.path.dirname(__file__))
 rootPath = os.path.split(curPath)[0]
 sys.path.append(rootPath)
@@ -18,39 +17,24 @@ userconfig = read_xlsx(rootPath + '/data/user_lizhouquan.xlsx')
 @allure.epic("云打印登录业务")
 class TestLogin(object):
 
-    def setup_function(self, login):
-        self.driver = login
-        self.driver.launch_app()
-        print("前面方法")
+    def setup_method(self):
+        self.login_page = App.start().to_login_page()
 
-    def teardown_function(self, login):
-        self.driver = login
-        self.driver.close_app()
-        print("后面方法")
+    def teardown_method(self):
+        App.quit()
+
 
     @allure.story("验证码登录")
     @allure.severity("critical")
-    def test_verifycode_login(self,login):
-        self.driver = login
-        l = LoginBusiness(self.driver)
-        flag1 = l.verify_login(phone=userconfig[0].get('phonenumber'), code=userconfig[0].get('code'), num=2, result=r"账号管理")
-        flag2 = l.logout(num=2, result=r"欢迎回来")
+    def test_verifycode_login(self):
+        flag1 = self.login_page.verify_login(phone=userconfig[0].get('phonenumber'), code=userconfig[0].get('code'), num=2, result=r"账号管理")
+        flag2 = self.login_page.logout(num=2, result=r"欢迎回来")
         assert flag1 & flag2
 
     @allure.story("密码登录")
     @allure.severity("critical")
-    def test_pwd_login(self,login):
-        self.driver = login
-        l = LoginBusiness(self.driver)
-        flag1 = l.pwd_login(phone=userconfig[0].get('phonenumber'), pwd=userconfig[0].get('password'), num=2, result=r"账号管理")
-        flag2 = l.logout(num=2, result=r"欢迎回来")
+    def test_pwd_login(self):
+        flag1 = self.login_page.pwd_login(phone=userconfig[0].get('phonenumber'), pwd=userconfig[0].get('password'), num=2, result=r"账号管理")
+        flag2 = self.login_page.logout(num=2, result=r"欢迎回来")
         assert flag1 & flag2
-
-    @allure.story("连接蓝牙")
-    @allure.severity("critical")
-    def test_device_connection(self,login):
-        self.driver = login
-        s = SomkeBusiness(self.driver)
-        flag = s.bluetooth_connection(num=3,hardware_series_name=r"B21", device_name=r"B21-C1176202",connection_name=r"B21")
-        assert flag
 
